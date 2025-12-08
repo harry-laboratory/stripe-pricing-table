@@ -7,15 +7,16 @@
   <link rel="icon" type="image/png" href="Logo_ofSite.jpg">
 
   <style>
-    html {
-      scroll-behavior: smooth;
-    }
     body {
       margin: 0;
       padding: 0;
       min-height: 100vh;
-      background: linear-gradient(135deg, #30220f, #6b4e2e);
+      background: linear-gradient(to bottom,
+      #30220f 0%,
+      #6b4e2e 40%,
+      #c49b63 100%);
       background-attachment: fixed;
+      background-size: cover;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
@@ -222,6 +223,50 @@
 
     handleScroll();            // αρχικό state
     window.addEventListener("scroll", handleScroll);
+  });
+
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    const btn = document.querySelector(".cta-button");
+    const target = document.getElementById("pricing");
+
+    if (!btn || !target) return;
+
+    // ease-in-out (ομαλό ξεκίνημα & σταμάτημα)
+    function easeInOutQuad(t) {
+      return t < 0.5
+        ? 2 * t * t
+        : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    }
+
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const startY = window.scrollY || window.pageYOffset;
+      const rect = target.getBoundingClientRect();
+      const offset = 0; // αν θέλεις να μείνει λίγο πιο πάνω/κάτω, άλλαξέ το π.χ. -40
+      const targetY = rect.top + startY + offset;
+      const distance = targetY - startY;
+      const duration = 800; // διάρκεια animation σε ms (π.χ. 600–900)
+
+      let startTime = null;
+
+      function animateScroll(currentTime) {
+        if (!startTime) startTime = currentTime;
+        const elapsed = currentTime - startTime;
+        const t = Math.min(elapsed / duration, 1); // 0 → 1
+        const eased = easeInOutQuad(t);
+
+        window.scrollTo(0, startY + distance * eased);
+
+        if (elapsed < duration) {
+          requestAnimationFrame(animateScroll);
+        }
+      }
+
+      requestAnimationFrame(animateScroll);
+    });
   });
 </script>
 

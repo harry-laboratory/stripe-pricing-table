@@ -17,6 +17,46 @@
       background: linear-gradient(135deg, #30220f, #6b4e2e);
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
+
+    .top-nav {
+  width: 100%;
+  background: #000;               /* Μαύρη λωρίδα */
+  padding: 12px 20px;
+  position: fixed;                /* Σταθερή στην κορυφή */
+  top: 0;
+  left: 0;
+  z-index: 999;
+  border-bottom: 1px solid #111;  /* Subtle separator */
+}
+
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px; /* αν θες τετραγωνάκι */
+}
+
+.nav-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #f5f5f5;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+/* Επειδή το nav είναι fixed, δίνουμε λίγο χώρο στο πάνω μέρος του page-shell */
+.page-shell {
+  padding-top: 80px;     /* push content below the nav bar */
+}
+    
     * {
   box-sizing: border-box;
     }
@@ -115,6 +155,13 @@
 </head>
   
 <body>
+  <nav class="top-nav">
+    <div class="nav-inner">
+      <img src="Logo_ofSite.jpg" alt="Logo" class="nav-logo">
+      <span class="nav-title">ANGELVS COURSES</span>
+    </div>
+  </nav>
+  
   <div class="page-shell">
     <section class="hero">
       <header class="page-header">

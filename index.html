@@ -277,11 +277,13 @@
       );
       observer.observe(target);
 
-/* Natural linear scroll — χωρίς επιτάχυνση ή επιβράδυνση */
+/* Smooth scroll με επιτάχυνση αρχή + επιβράδυνση στο τέλος */
 if (btn) {
 
-  function linear(t) {
-    return t;   // σταθερή ταχύτητα από την αρχή ως το τέλος
+  function easeInOutCubic(t) {
+    return t < 0.5
+      ? 4 * t * t * t
+      : 1 - Math.pow(-2 * t + 2, 3) / 2;
   }
 
   btn.addEventListener("click", function (e) {
@@ -291,7 +293,7 @@ if (btn) {
     const targetY = target.getBoundingClientRect().top + startY;
     const distance = targetY - startY;
 
-    const duration = 2200; // 0.5 sec — ιδανικό για μικρή απόσταση
+    const duration = 2100; // balanced: ούτε πολύ αργό ούτε γρήγορο
 
     let startTime = null;
 
@@ -301,7 +303,7 @@ if (btn) {
       const elapsed = time - startTime;
       const t = Math.min(elapsed / duration, 1);
 
-      const eased = linear(t);
+      const eased = easeInOutCubic(t);
       window.scrollTo(0, startY + distance * eased);
 
       if (elapsed < duration) {
@@ -312,7 +314,6 @@ if (btn) {
     requestAnimationFrame(animateScroll);
   });
 }
-
 
     });
   </script>

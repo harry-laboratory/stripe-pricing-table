@@ -277,44 +277,38 @@
       );
       observer.observe(target);
 
-      /* Ultra-smooth cinematic scroll με easeOutQuint */
-if (btn) {
+/* Soft Bounce Smooth Scroll */
+      if (btn) {
+        function easeOutSoftBounce(t) {
+          return Math.pow(1 - t, 3) * Math.cos(t * 3 * Math.PI) + 1;
+        }
 
-  function easeOutQuint(t) {
-    return 1 - Math.pow(1 - t, 5);
-  }
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
 
-  btn.addEventListener("click", function (e) {
-    e.preventDefault();
+          const startY = window.scrollY;
+          const targetY = target.getBoundingClientRect().top + startY;
+          const distance = targetY - startY;
+          const duration = 2500;
 
-    const startY = window.scrollY;
-    const targetY = target.getBoundingClientRect().top + startY;
-    const distance = targetY - startY;
+          let startTime = null;
 
-    const duration = 2200; // 1.2 seconds (slow + cinematic)
+          function animateScroll(time) {
+            if (!startTime) startTime = time;
+            const elapsed = time - startTime;
+            const t = Math.min(elapsed / duration, 1);
+            const eased = easeOutSoftBounce(t);
 
-    let startTime = null;
+            window.scrollTo(0, startY + distance * eased);
 
-    function animateScroll(time) {
-      if (!startTime) startTime = time;
+            if (elapsed < duration) requestAnimationFrame(animateScroll);
+          }
 
-      const elapsed = time - startTime;
-      const t = Math.min(elapsed / duration, 1); // 0 → 1
-
-      const eased = easeOutQuint(t);
-
-      window.scrollTo(0, startY + distance * eased);
-
-      if (elapsed < duration) {
-        requestAnimationFrame(animateScroll);
+          requestAnimationFrame(animateScroll);
+        });
       }
-    }
 
-    requestAnimationFrame(animateScroll);
     });
-  }
-
-});
   </script>
 </body>
 </html>

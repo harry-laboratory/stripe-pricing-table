@@ -277,36 +277,42 @@
       );
       observer.observe(target);
 
-/* Soft Bounce Smooth Scroll */
-      if (btn) {
-        function easeOutSoftBounce(t) {
-          return Math.pow(1 - t, 3) * Math.cos(t * 3 * Math.PI) + 1;
-        }
+/* Natural linear scroll — χωρίς επιτάχυνση ή επιβράδυνση */
+if (btn) {
 
-        btn.addEventListener("click", function (e) {
-          e.preventDefault();
+  function linear(t) {
+    return t;   // σταθερή ταχύτητα από την αρχή ως το τέλος
+  }
 
-          const startY = window.scrollY;
-          const targetY = target.getBoundingClientRect().top + startY;
-          const distance = targetY - startY;
-          const duration = 2500;
+  btn.addEventListener("click", function (e) {
+    e.preventDefault();
 
-          let startTime = null;
+    const startY = window.scrollY;
+    const targetY = target.getBoundingClientRect().top + startY;
+    const distance = targetY - startY;
 
-          function animateScroll(time) {
-            if (!startTime) startTime = time;
-            const elapsed = time - startTime;
-            const t = Math.min(elapsed / duration, 1);
-            const eased = easeOutSoftBounce(t);
+    const duration = 2200; // 0.5 sec — ιδανικό για μικρή απόσταση
 
-            window.scrollTo(0, startY + distance * eased);
+    let startTime = null;
 
-            if (elapsed < duration) requestAnimationFrame(animateScroll);
-          }
+    function animateScroll(time) {
+      if (!startTime) startTime = time;
 
-          requestAnimationFrame(animateScroll);
-        });
+      const elapsed = time - startTime;
+      const t = Math.min(elapsed / duration, 1);
+
+      const eased = linear(t);
+      window.scrollTo(0, startY + distance * eased);
+
+      if (elapsed < duration) {
+        requestAnimationFrame(animateScroll);
       }
+    }
+
+    requestAnimationFrame(animateScroll);
+  });
+}
+
 
     });
   </script>

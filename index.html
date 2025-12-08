@@ -277,40 +277,44 @@
       );
       observer.observe(target);
 
-        /* Smooth custom scroll με easeOutCubic */
-  if (btn) {
-    function easeOutCubic(t) {
-      return 1 - Math.pow(1 - t, 3);
+      /* Ultra-smooth cinematic scroll με easeOutQuint */
+if (btn) {
+
+  function easeOutQuint(t) {
+    return 1 - Math.pow(1 - t, 5);
+  }
+
+  btn.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    const startY = window.scrollY;
+    const targetY = target.getBoundingClientRect().top + startY;
+    const distance = targetY - startY;
+
+    const duration = 1200; // 1.2 seconds (slow + cinematic)
+
+    let startTime = null;
+
+    function animateScroll(time) {
+      if (!startTime) startTime = time;
+
+      const elapsed = time - startTime;
+      const t = Math.min(elapsed / duration, 1); // 0 → 1
+
+      const eased = easeOutQuint(t);
+
+      window.scrollTo(0, startY + distance * eased);
+
+      if (elapsed < duration) {
+        requestAnimationFrame(animateScroll);
+      }
     }
 
-    btn.addEventListener("click", function (e) {
-      e.preventDefault();
-
-      const startY = window.scrollY;
-      const targetY = target.getBoundingClientRect().top + startY;
-      const distance = targetY - startY;
-
-      const duration = 200; // 600–800 είναι sweet spot
-
-      let startTime = null;
-
-      function animateScroll(time) {
-        if (!startTime) startTime = time;
-        const elapsed = time - startTime;
-        const t = Math.min(elapsed / duration, 1);
-
-        const eased = easeOutCubic(t);
-        window.scrollTo(0, startY + distance * eased);
-
-        if (elapsed < duration) {
-          requestAnimationFrame(animateScroll);
-        }
-      }
-
-      requestAnimationFrame(animateScroll);
-        });
-      }
+    requestAnimationFrame(animateScroll);
     });
+  }
+
+});
   </script>
 </body>
 </html>

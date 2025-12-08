@@ -20,13 +20,13 @@
 
     .top-nav {
   width: 100%;
-  background: #000;               /* Μαύρη λωρίδα */
-  padding: 12px 20px;
-  position: fixed;                /* Σταθερή στην κορυφή */
+  background: #000;
+  padding: 16px 20px;          /* πιο παχύ padding → πιο ψηλή nav bar */
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 999;
-  border-bottom: 1px solid #111;  /* Subtle separator */
+  border-bottom: 1px solid #111;
 }
 
 .nav-inner {
@@ -34,28 +34,30 @@
   margin: 0 auto;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;     /*  logo + title στο ΚΕΝΤΡΟ */
+  gap: 14px;                   /* λίγο πιο άνετο spacing */
 }
 
 .nav-logo {
-  width: 28px;
-  height: 28px;
-  border-radius: 4px; /* αν θες τετραγωνάκι */
+  width: 36px;                 /*  μεγαλύτερο logo */
+  height: 36px;
+  border-radius: 4px;
 }
 
 .nav-title {
-  font-size: 1.1rem;
+  font-size: 1.3rem;           /*  μεγαλύτερο title */
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;         /* πιο premium look */
   color: #f5f5f5;
   text-transform: uppercase;
   user-select: none;
 }
 
-/* Επειδή το nav είναι fixed, δίνουμε λίγο χώρο στο πάνω μέρος του page-shell */
+/* Push content down because nav is fixed */
 .page-shell {
-  padding-top: 80px;     /* push content below the nav bar */
+  padding-top: 120px;          /*  αυξημένο γιατί η nav έγινε πιο ψηλή */
 }
+
     
     * {
   box-sizing: border-box;

@@ -114,13 +114,7 @@
     * {
   box-sizing: border-box;
     }
-    
-    .page-shell {
-      max-width: 1100px;
-      margin: 0 auto 32px auto;
-      padding: 0 16px;
-      color: #f5f5f5;
-    }
+
     .hero {
       min-height: 100vh;                /* εδώ είναι το magic: σχεδόν όλο το ύψος οθόνης */
       display: flex;
@@ -218,127 +212,6 @@
 
   <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
 </head>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const nav = document.querySelector(".top-nav");
-    if (!nav) return;
-
-    function handleScroll() {
-      if (window.scrollY > 10) {
-        nav.classList.add("scrolled");
-      } else {
-        nav.classList.remove("scrolled");
-      }
-    }
-
-    handleScroll();            // αρχικό state
-    window.addEventListener("scroll", handleScroll);
-  });
-
-
-  // Scroll κουμπι easy in-out
-  document.addEventListener("DOMContentLoaded", function () {
-    const btn = document.querySelector(".cta-button");
-    const target = document.getElementById("pricing");
-
-    if (!btn || !target) return;
-
-    // ease-in-out (ομαλό ξεκίνημα & σταμάτημα)
-    function easeInOutQuad(t) {
-      return t < 0.5
-        ? 2 * t * t
-        : 1 - Math.pow(-2 * t + 2, 2) / 2;
-
-      /* 🔹 1. Fade+scale όταν μπει στο viewport */
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            target.classList.add("is-visible");
-            observer.disconnect(); // το κάνουμε μόνο μία φορά
-          }
-        });
-      },
-      {
-        threshold: 0.25, // όταν το 25% του στοιχείου είναι ορατό
-      }
-    );
-observer.observe(target);
-
-    /* 🔹 2. Smooth scroll στο pricing, με ease-in-out */
-    if (btn) {
-      btn.addEventListener("click", function (e) {
-        e.preventDefault();
-
-        const startY = window.scrollY || window.pageYOffset;
-        const rect = target.getBoundingClientRect();
-        const offset = 0; // αν θες να σταματάει λίγο πιο πάνω/κάτω, πείραξέ το
-        const targetY = rect.top + startY + offset;
-        const distance = targetY - startY;
-        const duration = 800; // ms
-
-        function easeInOutQuad(t) {
-          return t < 0.5
-            ? 2 * t * t
-            : 1 - Math.pow(-2 * t + 2, 2) / 2;
-        }
-
-        let startTime = null;
-
-        function animateScroll(currentTime) {
-          if (!startTime) startTime = currentTime;
-          const elapsed = currentTime - startTime;
-          const t = Math.min(elapsed / duration, 1);
-          const eased = easeInOutQuad(t);
-
-          window.scrollTo(0, startY + distance * eased);
-
-          if (elapsed < duration) {
-            requestAnimationFrame(animateScroll);
-          }
-        }
-
-        requestAnimationFrame(animateScroll);
-      });
-    }
-  });
-      
-
-
-      
-    
-
-    btn.addEventListener("click", function (e) {
-      e.preventDefault();
-
-      const startY = window.scrollY || window.pageYOffset;
-      const rect = target.getBoundingClientRect();
-      const offset = 0; // αν θέλεις να μείνει λίγο πιο πάνω/κάτω, άλλαξέ το π.χ. -40
-      const targetY = rect.top + startY + offset;
-      const distance = targetY - startY;
-      const duration = 600; // διάρκεια animation σε ms (π.χ. 600–900)
-
-      let startTime = null;
-
-      function animateScroll(currentTime) {
-        if (!startTime) startTime = currentTime;
-        const elapsed = currentTime - startTime;
-        const t = Math.min(elapsed / duration, 1); // 0 → 1
-        const eased = easeInOutQuad(t);
-
-        window.scrollTo(0, startY + distance * eased);
-
-        if (elapsed < duration) {
-          requestAnimationFrame(animateScroll);
-        }
-      }
-
-      requestAnimationFrame(animateScroll);
-    });
-  });
-</script>
-
   
 <body>
   <nav class="top-nav">
@@ -375,5 +248,66 @@ observer.observe(target);
       </a>
     </footer>
   </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const nav = document.querySelector(".top-nav");
+      const btn = document.querySelector(".cta-button");
+      const target = document.getElementById("pricing");
+
+      /* ----- NAV BAR SCROLL EFFECT ----- */
+      function handleNavScroll() {
+        if (window.scrollY > 10) nav.classList.add("scrolled");
+        else nav.classList.remove("scrolled");
+      }
+      handleNavScroll();
+      window.addEventListener("scroll", handleNavScroll);
+
+      /* ----- Fade-in Pricing Table When Visible ----- */
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              target.classList.add("is-visible");
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.25 }
+      );
+      observer.observe(target);
+
+      /* ----- Soft Bounce Smooth Scroll ----- */
+      if (btn) {
+        function easeOutSoftBounce(t) {
+          return Math.pow(1 - t, 3) * Math.cos(t * 3 * Math.PI) + 1;
+        }
+
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const startY = window.scrollY;
+          const targetY = target.getBoundingClientRect().top + startY;
+          const distance = targetY - startY;
+          const duration = 900;
+
+          let startTime = null;
+
+          function animateScroll(time) {
+            if (!startTime) startTime = time;
+            const elapsed = time - startTime;
+            const t = Math.min(elapsed / duration, 1);
+            const eased = easeOutSoftBounce(t);
+
+            window.scrollTo(0, startY + distance * eased);
+
+            if (elapsed < duration) requestAnimationFrame(animateScroll);
+          }
+
+          requestAnimationFrame(animateScroll);
+        });
+      }
+    });
+  </script>
 </body>
 </html>

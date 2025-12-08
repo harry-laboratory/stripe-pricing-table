@@ -100,6 +100,15 @@
     0 0 28px rgba(0, 0, 0, 0.7);
   transform: translateY(-0.5px);
 }
+    .nav-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
 
 /* για να μη "φάει" το περιεχόμενο η fixed nav */
 .page-shell {
@@ -234,11 +243,11 @@
   
 <body>
   <nav class="top-nav">
-    <div class="nav-inner">
+    <a href="https://angelvscourses.com" class="nav-inner nav-link">
       <img src="Logo_ofSite.jpg" alt="Logo" class="nav-logo">
       <span class="nav-title">ANGELVS COURSES</span>
-    </div>
-  </nav>
+   </a>
+ </nav>
   
   <div class="page-shell">
     <section class="hero">

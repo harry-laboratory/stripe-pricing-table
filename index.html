@@ -7,12 +7,6 @@
   <link rel="icon" type="image/png" href="Logo_ofSite.jpg">
 
   <style>
-    .pricing-page {
-      max-width: 1200px;              /* δεν το στενεύουμε πολύ, για να μένουν τα 3 plans δίπλα-δίπλα */
-      margin: 100px auto;    /* 40px πάνω, 40px κάτω, κέντρο οριζόντια */
-      padding: 0 12px;                /* λίγο δεξιά/αριστερά σε μικρές οθόνες */
-      justify-content: center;
-    }
     body {
       margin: 0;
       padding: 0;
@@ -23,6 +17,7 @@
     * {
   box-sizing: border-box;
     }
+    
     .page-shell {
       max-width: 1100px;
       margin: 40px auto 32px auto;
@@ -70,12 +65,13 @@
       transform: translateY(0);
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
     }
+    
     .pricing-wrapper {
-      display: flex;
       justify-content: center;
       margin-bottom: 32px;
       animation: fadeUp 0.7s ease-out 0.08s backwards;
     }
+    
     .footer {
       text-align: center;
       font-size: 0.85rem;
@@ -118,10 +114,12 @@
     </div>
 
     <main id="pricing" class="pricing-wrapper">
-      <stripe-pricing-table 
-        pricing-table-id="prctbl_1ST3gSCHjQxxAwECVOkBpYBg"
-        publishable-key="pk_live_51Ii3euCHjQxxAwECTEUk2cNv9qpHd9iYQAwjeVryLgvGrcJQotqnJAMfS4lbKOqk2RrYBn0LhfEkS0tldTCb9QJQ00EvQGMbYB">
-      </stripe-pricing-table>
+      <div class="pricing-inner">
+        <stripe-pricing-table 
+          pricing-table-id="prctbl_1ST3gSCHjQxxAwECVOkBpYBg"
+          publishable-key="pk_live_51Ii3euCHjQxxAwECTEUk2cNv9qpHd9iYQAwjeVryLgvGrcJQotqnJAMfS4lbKOqk2RrYBn0LhfEkS0tldTCb9QJQ00EvQGMbYB">
+        </stripe-pricing-table>
+      </div>  
     </main>
 
     <footer class="footer">

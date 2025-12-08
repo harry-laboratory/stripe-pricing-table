@@ -20,9 +20,17 @@
     
     .page-shell {
       max-width: 1100px;
-      margin: 40px auto 32px auto;
+      margin: 0 auto 32px auto;
       padding: 0 16px;
       color: #f5f5f5;
+    }
+    .hero {
+      min-height: 80vh;                /* εδώ είναι το magic: σχεδόν όλο το ύψος οθόνης */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;         /* κάθετο κέντρο */
+      align-items: center;             /* οριζόντιο κέντρο */
+      text-align: center;
     }
     .page-header {
       text-align: center;
@@ -67,6 +75,7 @@
     }
     
     .pricing-wrapper {
+      max-width: 1200px;
       justify-content: center;
       margin-bottom: 32px;
       animation: fadeUp 0.7s ease-out 0.08s backwards;
@@ -101,25 +110,25 @@
 
   <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
 </head>
+  
 <body>
   <div class="page-shell">
+    <section class="hero">
+      <header class="page-header">
+        <h1>Courses Shop</h1>
+        <p>Choose the course that suits you.</p>
+      </header>
 
-    <header class="page-header">
-      <h1>Courses Shop</h1>
-      <p>Choose the course that suits you.</p>
-    </header>
-
-    <div class="cta-wrapper">
-      <a href="#pricing" class="cta-button">Go to courses</a>
-    </div>
+      <div class="cta-wrapper">
+        <a href="#pricing" class="cta-button">Go to courses</a>
+      </div>
+    </section>
 
     <main id="pricing" class="pricing-wrapper">
-      <div class="pricing-inner">
-        <stripe-pricing-table 
+      <stripe-pricing-table 
           pricing-table-id="prctbl_1ST3gSCHjQxxAwECVOkBpYBg"
           publishable-key="pk_live_51Ii3euCHjQxxAwECTEUk2cNv9qpHd9iYQAwjeVryLgvGrcJQotqnJAMfS4lbKOqk2RrYBn0LhfEkS0tldTCb9QJQ00EvQGMbYB">
-        </stripe-pricing-table>
-      </div>  
+        </stripe-pricing-table>  
     </main>
 
     <footer class="footer">

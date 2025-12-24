@@ -127,12 +127,16 @@
     }
 
     .hero {
-      min-height: 200vh;                /* εδώ είναι το magic: σχεδόν όλο το ύψος οθόνης */
+      min-height: 100vh;                /* εδώ είναι το magic: σχεδόν όλο το ύψος οθόνης */
       display: flex;
       flex-direction: column;
       justify-content: center;         /* κάθετο κέντρο */
       align-items: center;             /* οριζόντιο κέντρο */
       text-align: center;
+    }
+    .hero-scroll-space {
+      height: 100vh;   /* ένα επιπλέον "νοητό παράθυρο" */
+      pointer-events: none;
     }
     .page-header {
       text-align: center;
@@ -305,6 +309,7 @@
       <div class="cta-wrapper">
         <a href="#pricing" class="cta-button">View prices</a>
       </div>
+      <div class="hero-scroll-space"></div>
     </section>
 
     <main id="pricing" class="pricing-wrapper">

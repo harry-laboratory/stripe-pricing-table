@@ -319,8 +319,63 @@
 <!-- Calendly badge widget begin -->
 <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
-<script type="text/javascript">window.onload = function() { Calendly.initBadgeWidget({ url: 'https://calendly.com/charilaoangelus/online-lesson-booking?hide_gdpr_banner=1', text: 'Book your Lesson', color: '#0069ff', textColor: '#ffffff', branding: true }); }</script>
+
+<script>
+  // 1) Init Calendly badge
+  window.addEventListener("load", function () {
+    Calendly.initBadgeWidget({
+      url: "https://calendly.com/charilaoangelus/online-lesson-booking?hide_gdpr_banner=1",
+      text: "Book your Lesson",
+      color: "#0074d4",
+      textColor: "#ffffff",
+      branding: true
+    });
+
+    // 2) Make Calendly badge look & behave like the "View prices" button
+    (function syncCalendlyToViewPrices() {
+      const MAX_TRIES = 80;      // ~8 seconds
+      const INTERVAL = 100;      // ms
+      let tries = 0;
+
+      const timer = setInterval(() => {
+        tries++;
+
+        // Find "View prices" element (anchor)
+        const viewPrices =
+          [...document.querySelectorAll("a, button")]
+            .find(el => (el.textContent || "").trim().toLowerCase() === "view prices");
+
+        // Find Calendly badge content
+        const calendlyContent = document.querySelector(".calendly-badge-content");
+        const calendlyWidget  = document.querySelector(".calendly-badge-widget");
+
+        if (viewPrices && calendlyContent && calendlyWidget) {
+          // Copy classes (this transfers styling + hover effects if they’re class-based)
+          calendlyContent.className = viewPrices.className || calendlyContent.className;
+
+          // Optional: if your "View prices" styling is on the <a> itself, make badge content act like it
+          calendlyContent.setAttribute("role", "button");
+          calendlyContent.style.cursor = "pointer";
+
+          // IMPORTANT: Calendly sets inline background/colors; remove them so your site CSS can win
+          calendlyContent.style.background = "";
+          calendlyContent.style.color = "";
+
+          // If your "View prices" has inline styles too, copy them
+          const vpStyle = viewPrices.getAttribute("style");
+          if (vpStyle) calendlyContent.setAttribute("style", vpStyle + "; cursor:pointer;");
+
+          clearInterval(timer);
+          return;
+        }
+
+        if (tries >= MAX_TRIES) clearInterval(timer);
+      }, INTERVAL);
+    })();
+  });
+</script>
 <!-- Calendly badge widget end -->
+
     
     <footer class="footer">
   <a href="https://angelvscourses.com/privacy-policy" class="footer-link" rel="noopener noreferrer">

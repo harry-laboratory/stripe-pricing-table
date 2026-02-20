@@ -376,7 +376,7 @@
 <body id="top">
   <nav class="top-nav">
     <a href="#top" class="nav-inner nav-link">
-      <img src="Logo_ofSite.jpg" alt="Logo" class="nav-logo nav-title">
+      <img src="Logo_ofSite.jpg" alt="Logo" class="nav-logo">
       <span class="nav-title">ANGELVS COURSES · STORE</span>
    </a>
  </nav>
@@ -439,7 +439,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const nav = document.querySelector(".top-nav");
-  const navTitle = document.querySelector(".nav-title");
+  const navInner = document.querySelector(".nav-inner");
   const btn = document.querySelector(".cta-button");
   const target = document.getElementById("pricing");
 
@@ -453,15 +453,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ----- Smooth Scroll to Top (click on nav title) ----- */
- if (navTitle) {
-  navTitle.style.cursor = "pointer";
+ if (navInner) {
+  navInner.style.cursor = "pointer";
 
   const easeInOutCubic = (t) =>
     t < 0.5
       ? 4 * t * t * t
       : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-  navTitle.addEventListener("click", (e) => {
+  navInner.addEventListener("click", (e) => {
     e.preventDefault();
 
     const startY = window.scrollY;

@@ -213,7 +213,7 @@
     .pricing-wrapper.is-visible {
       opacity: 1;
       transform: translateY(0) scale(1);
-      border-radius: 12px 12px 0 0;
+      border-radius: 0 0 12px 12px;
       overflow: hidden;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.10),
                  0 20px 40px rgba(0, 0, 0, 0.15);
@@ -238,7 +238,7 @@
     .pricing-intro {
   background: #0d0d0d;
   padding: 24px;
-  border-radius: 0 0 12px 12px;
+  border-radius: 12px 12px 0 0;
   box-shadow:  0 8px 16px rgba(0, 0, 0, 0.10),
               0 20px 40px rgba(0, 0, 0, 0.15);
   margin-bottom: 24px;
@@ -386,16 +386,9 @@
         <a href="#pricing" class="cta-button">View prices</a>
       </div>
     </section>
-
-    <main id="pricing" class="pricing-wrapper">
-      <stripe-pricing-table 
-          pricing-table-id="prctbl_1ST3gSCHjQxxAwECVOkBpYBg"
-          publishable-key="pk_live_51Ii3euCHjQxxAwECTEUk2cNv9qpHd9iYQAwjeVryLgvGrcJQotqnJAMfS4lbKOqk2RrYBn0LhfEkS0tldTCb9QJQ00EvQGMbYB">
-        </stripe-pricing-table>
-    </main>
-
+    
     <div class="pricing-intro">
-      <p>  Book online lessons with ANGELVS COURSES. Choose Electric Guitar, Classical Guitar, Essential Music Theory, or Dual Guitar Bundle.</p>
+      <p style="color: #ffffff;">  Book online lessons with ANGELVS COURSES. Choose Electric Guitar, Classical Guitar, Essential Music Theory, or Dual Guitar Bundle.</p>
       <ul>
         <li>Electric Guitar — 60 minutes</li>
         <li>Classical Guitar — 60 minutes</li>
@@ -404,6 +397,13 @@
       </ul>
       <p><a href="https://angelvscourses.com">  Back to the main website</a></p>
     </div>
+
+    <main id="pricing" class="pricing-wrapper">
+      <stripe-pricing-table 
+          pricing-table-id="prctbl_1ST3gSCHjQxxAwECVOkBpYBg"
+          publishable-key="pk_live_51Ii3euCHjQxxAwECTEUk2cNv9qpHd9iYQAwjeVryLgvGrcJQotqnJAMfS4lbKOqk2RrYBn0LhfEkS0tldTCb9QJQ00EvQGMbYB">
+        </stripe-pricing-table>
+    </main>
 
 <!-- Calendly badge widget begin -->
 <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">

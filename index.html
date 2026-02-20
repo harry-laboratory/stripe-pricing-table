@@ -368,7 +368,7 @@
   
 <body>
   <nav class="top-nav">
-    <a href="https://angelvscourses.com" class="nav-inner nav-link">
+    <a class="nav-inner nav-link">
       <img src="Logo_ofSite.jpg" alt="Logo" class="nav-logo">
       <span class="nav-title">ANGELVS COURSES · STORE</span>
    </a>
@@ -395,7 +395,7 @@
         <li>Essential Music Theory — 45 minutes</li>
         <li>Dual Guitar Bundle — 75 minutes</li>
       </ul>
-      <p><a href="https://angelvscourses.com">  Back to the main website</a></p>
+      <p><a href="https://www.angelvscourses.com/">  Back to the main website</a></p>
     </div>
 
     <main id="pricing" class="pricing-wrapper">
@@ -456,6 +456,22 @@
         { threshold: 0.25 }
       );
       observer.observe(target);
+
+/* Smooth Scroll to the top */
+    document.addEventListener("DOMContentLoaded", function () {
+    const navTitle = document.querySelector(".nav-title");
+
+    if (!navTitle) return;
+
+    navTitle.addEventListener("click", function (e) {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  });
+
 
 /* Smooth scroll με επιτάχυνση αρχή + επιβράδυνση στο τέλος */
 if (btn) {

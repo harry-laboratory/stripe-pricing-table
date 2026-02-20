@@ -453,13 +453,38 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ----- Smooth Scroll to Top (click on nav title) ----- */
-  if (navTitle) {
-    navTitle.style.cursor = "pointer";
-    navTitle.addEventListener("click", (e) => {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  }
+ if (navTitle) {
+  navTitle.style.cursor = "pointer";
+
+  const easeInOutCubic = (t) =>
+    t < 0.5
+      ? 4 * t * t * t
+      : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+  navTitle.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const startY = window.scrollY;
+    const distance = -startY; // πάμε στο 0
+
+    const duration = 1800; // όσο μεγαλύτερο τόσο πιο αργό
+
+    let startTime = null;
+
+    const animateScroll = (time) => {
+      if (!startTime) startTime = time;
+
+      const elapsed = time - startTime;
+      const t = Math.min(elapsed / duration, 1);
+
+      window.scrollTo(0, startY + distance * easeInOutCubic(t));
+
+      if (t < 1) requestAnimationFrame(animateScroll);
+    };
+
+    requestAnimationFrame(animateScroll);
+  });
+}
 
   /* ----- Fade-in on Visible (supports multiple elements) ----- */
   const fadeEls = document.querySelectorAll(".fade-in");

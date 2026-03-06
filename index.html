@@ -402,7 +402,7 @@
         <li>Essential Music Theory — 45 minutes</li>
         <li>Dual Guitar Bundle — 75 minutes</li>
       </ul>
-      <p><a href="https://www.angelvscourses.com/">  Back to the main website</a></p>
+      <p><a href="https://www.angelvscourses.com/" data-amp-link="true">  Back to the main website</a></p>
     </div>
 
     <main id="pricing" class="pricing-wrapper fade-in">
@@ -419,11 +419,11 @@
 <!-- Calendly badge widget end -->
     
     <footer class="footer">
-  <a href="https://angelvscourses.com/privacy-policy" class="footer-link" rel="noopener noreferrer">
+  <a href="https://angelvscourses.com/privacy-policy" class="footer-link" rel="noopener noreferrer" data-amp-link="true">
     PRIVACY POLICY
   </a>
   <span class="footer-separator"> | </span>
-  <a href="https://angelvscourses.com/terms-of-use" class="footer-link" rel="noopener noreferrer">
+  <a href="https://angelvscourses.com/terms-of-use" class="footer-link" rel="noopener noreferrer" data-amp-link="true">
     TERMS OF USE
     <br>
     <br>
@@ -442,6 +442,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const navInner = document.querySelector(".nav-inner");
   const btn = document.querySelector(".cta-button");
   const target = document.getElementById("pricing");
+
+  /* ----- Optional AMP-friendly outbound links ----- */
+  const pageParams = new URLSearchParams(window.location.search);
+  const ampEnabled = pageParams.get("amp") === "1";
+
+  if (ampEnabled) {
+    const withAmpParam = (rawUrl) => {
+      try {
+        const url = new URL(rawUrl, window.location.origin);
+        if (url.origin !== window.location.origin) {
+          url.searchParams.set("amp", "1");
+        }
+        return url.toString();
+      } catch {
+        return rawUrl;
+      }
+    };
+
+    document.querySelectorAll("a[data-amp-link='true']").forEach((link) => {
+      const href = link.getAttribute("href");
+      if (!href) return;
+      link.setAttribute("href", withAmpParam(href));
+    });
+  }
 
   /* ----- NAV BAR SCROLL EFFECT ----- */
   if (nav) {

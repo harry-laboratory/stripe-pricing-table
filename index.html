@@ -455,6 +455,7 @@ body {
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+  let scrollTimeout;
   const nav = document.querySelector(".top-nav");
   const navInner = document.querySelector(".nav-inner");
   const btn = document.querySelector(".cta-button");
@@ -492,6 +493,16 @@ document.addEventListener("DOMContentLoaded", () => {
     handleNavScroll();
     window.addEventListener("scroll", handleNavScroll, { passive: true });
   }
+
+  window.addEventListener("scroll", () => {
+    document.body.classList.add("scrolling");
+
+    clearTimeout(scrollTimeout);
+
+    scrollTimeout = setTimeout(() => {
+      document.body.classList.remove("scrolling");
+    }, 800);
+  });
 
   /* ----- Smooth Scroll to Top (click on nav title) ----- */
  if (navInner) {

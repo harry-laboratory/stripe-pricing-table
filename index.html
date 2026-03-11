@@ -606,7 +606,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const backdrop = document.getElementById("cookie-backdrop");
   const acceptBtn = document.getElementById("cookie-accept");
   const rejectBtn = document.getElementById("cookie-reject");
-  const savedChoice = safeStorageGet(COOKIE_KEY);
 
   function safeStorageGet(key) {
   try {
@@ -625,7 +624,37 @@ function safeStorageSet(key, value) {
   }
 }
 
+const savedChoice = safeStorageGet(COOKIE_KEY);
 let consentUiReady = false;
+let consentBlockingEnabled = false;
+
+function elementIsActuallyVisible(el) {
+  if (!el) return false;
+  if (el.hidden) return false;
+
+  const style = window.getComputedStyle(el);
+  if (style.display === "none") return false;
+  if (style.visibility === "hidden") return false;
+  if (parseFloat(style.opacity) === 0) return false;
+
+  const rect = el.getBoundingClientRect();
+  return rect.width > 0 && rect.height > 0;
+}
+
+const disableConsentUiCompletely = () => {
+  consentBlockingEnabled = false;
+  document.body.classList.remove("cookie-consent-active");
+
+  if (banner) {
+    banner.hidden = true;
+    banner.classList.remove("is-hiding");
+  }
+
+  if (backdrop) {
+    backdrop.hidden = true;
+    backdrop.classList.remove("is-hiding");
+  }
+};
   
 const showBanner = () => {
   if (!consentUiReady) return;
@@ -640,11 +669,22 @@ const showBanner = () => {
     backdrop.classList.remove("is-hiding");
   }
 
-  document.body.classList.add("cookie-consent-active");
+  requestAnimationFrame(() => {
+    const bannerVisible = elementIsActuallyVisible(banner);
+    const backdropVisible = elementIsActuallyVisible(backdrop);
+
+    if (bannerVisible && backdropVisible) {
+      consentBlockingEnabled = true;
+      document.body.classList.add("cookie-consent-active");
+    } else {
+      disableConsentUiCompletely();
+    }
+  });
 };
 
 const hideBanner = () => {
-  if (!consentUiReady) return;
+  document.body.classList.remove("cookie-consent-active");
+  consentBlockingEnabled = false;
 
   if (banner) {
     banner.classList.add("is-hiding");
@@ -653,8 +693,6 @@ const hideBanner = () => {
   if (backdrop) {
     backdrop.classList.add("is-hiding");
   }
-
-  document.body.classList.remove("cookie-consent-active");
 
   setTimeout(() => {
     if (banner) {
@@ -675,20 +713,6 @@ const hideBanner = () => {
     console.log("Optional cookies accepted");
   };
 
-  const disableConsentUiCompletely = () => {
-  document.body.classList.remove("cookie-consent-active");
-
-  if (banner) {
-    banner.hidden = true;
-    banner.classList.remove("is-hiding");
-  }
-
-  if (backdrop) {
-    backdrop.hidden = true;
-    backdrop.classList.remove("is-hiding");
-  }
-};
-  
 try {
   if (banner && backdrop && acceptBtn && rejectBtn) {
     consentUiReady = true;
@@ -717,7 +741,6 @@ try {
   }
 } catch (err) {
   console.warn("Cookie consent fallback mode enabled:", err);
-  consentUiReady = false;
   disableConsentUiCompletely();
 }
 

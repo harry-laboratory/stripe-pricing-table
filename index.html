@@ -624,13 +624,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const { downTarget, upTarget } = getPricingTargets();
 
         // Φάση 1: κατέβα μέχρι χαμηλά στο pricing table
-        await animateWindowScroll(startY, downTarget, 2200);
+        await animateWindowScroll(startY, downTarget, 3200);
 
         // μικρή παύση για cinematic effect
-        await sleep(260);
+        await sleep(380);
 
         // Φάση 2: ανέβα και σταμάτα ώστε να φαίνονται τα 2 πρώτα προϊόντα
-        await animateWindowScroll(downTarget, upTarget, 1600);
+        await animateWindowScroll(downTarget, upTarget, 2400);
       } finally {
         btn.classList.remove("is-busy");
         isTourAnimating = false;

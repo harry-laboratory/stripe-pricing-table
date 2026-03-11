@@ -831,13 +831,13 @@ const hideBanner = () => {
         const { downTarget, upTarget } = getPricingTargets();
 
         // Φάση 1: κατέβα μέχρι χαμηλά στο pricing table
-        await animateWindowScroll(startY, downTarget, 3100);
+        await animateWindowScroll(startY, downTarget, 3150);
 
         // μικρή παύση για cinematic effect
-        await sleep(150);
+        await sleep(100);
 
         // Φάση 2: ανέβα και σταμάτα ώστε να φαίνονται τα 2 πρώτα προϊόντα
-        await animateWindowScroll(downTarget, upTarget, 2000);
+        await animateWindowScroll(downTarget, upTarget, 1800);
       } finally {
         btn.classList.remove("is-busy");
         isTourAnimating = false;

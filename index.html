@@ -200,19 +200,27 @@ body.cookie-consent-active {
 
 .compatibility-banner {
   position: fixed;
-  left: 20px;
-  right: 20px;
-  bottom: 20px;
-  z-index: 9997;
-  margin: 0 auto;
-  width: min(680px, calc(100% - 40px));
-  background: rgba(20, 20, 20, 0.92);
-  color: #f5f5f5;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 14px;
-  padding: 12px 16px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10001;
+  background: rgba(35, 35, 35, 0.96);
+  color: #fff;
   text-align: center;
-  font-size: 0.9rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+  .compatibility-banner[hidden] {
+  display: none !important;
+}
+
+  .compatibility-banner__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
 }
 
 @media (max-width: 640px) {
@@ -539,6 +547,12 @@ body.cookie-consent-active {
       <span class="nav-title">ANGELVS COURSES · STORE</span>
    </a>
  </nav>
+
+  <div id="compatibility-banner" class="compatibility-banner" hidden>
+  <div class="compatibility-banner__inner">
+    Having trouble with this page? Try disabling your ad-blocker or privacy shield, then reload.
+  </div>
+</div>
   
   <div class="page-shell">
     <section class="hero">
@@ -591,10 +605,6 @@ body.cookie-consent-active {
 <script type="text/javascript">window.onload = function() { Calendly.initBadgeWidget({ url: 'https://calendly.com/charilaoangelus/online-lesson-booking?hide_gdpr_banner=1', text: 'Book a trial lesson', color: '#0074d4', textColor: '#ffffff', branding: true }); }</script>
 <!-- Calendly badge widget end -->
     
-    <div id="compatibility-banner" class="compatibility-banner" hidden>
-      Cookie preferences are unavailable in this browser mode.
-    </div>
-
     <footer class="footer">
   <a href="https://angelvscourses.com/privacy-policy" class="footer-link" rel="noopener noreferrer" data-amp-link="true">
     PRIVACY POLICY
@@ -677,22 +687,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function disableConsentUiCompletely() {
-    consentBlockingEnabled = false;
-    document.body.classList.remove("cookie-consent-active");
+  consentBlockingEnabled = false;
+  document.body.classList.remove("cookie-consent-active");
 
-    if (banner) {
-      banner.hidden = true;
-      banner.classList.remove("is-hiding");
-    }
-
-    if (backdrop) {
-      backdrop.hidden = true;
-      backdrop.classList.remove("is-hiding");
-    }
-
-    showCompatibilityBanner();
+  if (banner) {
+    banner.hidden = true;
+    banner.classList.remove("is-hiding");
   }
 
+  if (backdrop) {
+    backdrop.hidden = true;
+    backdrop.classList.remove("is-hiding");
+  }
+}
+
+  function recoverFromBrokenConsentState() {
+  disableConsentUiCompletely();
+  showCompatibilityBanner();
+}
+  
   function enableOptionalCookies() {
     // ΕΔΩ βάζεις οτιδήποτε μη απαραίτητο
     // π.χ. Google Analytics / Meta Pixel / Hotjar
@@ -706,8 +719,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const backdropVisible = elementIsActuallyVisible(backdrop);
 
       if (bodyLocked && (!bannerVisible || !backdropVisible)) {
-        disableConsentUiCompletely();
-        showCompatibilityBanner();
+        recoverFromBrokenConsentState();
       }
     }, 500);
   }
@@ -725,18 +737,19 @@ document.addEventListener("DOMContentLoaded", () => {
       backdrop.classList.remove("is-hiding");
     }
 
-    requestAnimationFrame(() => {
-      const bannerVisible = elementIsActuallyVisible(banner);
-      const backdropVisible = elementIsActuallyVisible(backdrop);
+  requestAnimationFrame(() => {
+    const bannerVisible = elementIsActuallyVisible(banner);
+    const backdropVisible = elementIsActuallyVisible(backdrop);
 
-      if (bannerVisible && backdropVisible) {
-        consentBlockingEnabled = true;
-        document.body.classList.add("cookie-consent-active");
-        hideCompatibilityBanner();
-      } else {
-        disableConsentUiCompletely();
-      }
-    });
+    if (bannerVisible && backdropVisible) {
+      consentBlockingEnabled = true;
+      document.body.classList.add("cookie-consent-active");
+      hideCompatibilityBanner();
+    } else {
+      disableConsentUiCompletely();
+      hideCompatibilityBanner();
+    }
+  });
 
     runCompatibilityWatchdog();
   };

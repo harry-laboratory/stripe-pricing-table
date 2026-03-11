@@ -606,9 +606,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const backdrop = document.getElementById("cookie-backdrop");
   const acceptBtn = document.getElementById("cookie-accept");
   const rejectBtn = document.getElementById("cookie-reject");
-  const savedChoice = localStorage.getItem(COOKIE_KEY);
+  const savedChoice = safeStorageGet(COOKIE_KEY);
 
+  function safeStorageGet(key) {
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeStorageSet(key, value) {
+  try {
+    window.localStorage.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+let consentUiReady = false;
+  
 const showBanner = () => {
+  if (!consentUiReady) return;
+
   if (banner) {
     banner.hidden = false;
     banner.classList.remove("is-hiding");
@@ -623,6 +644,8 @@ const showBanner = () => {
 };
 
 const hideBanner = () => {
+  if (!consentUiReady) return;
+
   if (banner) {
     banner.classList.add("is-hiding");
   }
@@ -652,25 +675,51 @@ const hideBanner = () => {
     console.log("Optional cookies accepted");
   };
 
-  if (!savedChoice) {
-  showBanner();
-} else if (savedChoice === "accepted") {
-  enableOptionalCookies();
-  hideBanner();
-} else if (savedChoice === "rejected") {
-  hideBanner();
+  const disableConsentUiCompletely = () => {
+  document.body.classList.remove("cookie-consent-active");
+
+  if (banner) {
+    banner.hidden = true;
+    banner.classList.remove("is-hiding");
+  }
+
+  if (backdrop) {
+    backdrop.hidden = true;
+    backdrop.classList.remove("is-hiding");
+  }
+};
+  
+try {
+  if (banner && backdrop && acceptBtn && rejectBtn) {
+    consentUiReady = true;
+
+    if (!savedChoice) {
+      showBanner();
+    } else if (savedChoice === "accepted") {
+      enableOptionalCookies();
+      hideBanner();
+    } else if (savedChoice === "rejected") {
+      hideBanner();
+    }
+
+    acceptBtn.addEventListener("click", () => {
+      safeStorageSet(COOKIE_KEY, "accepted");
+      enableOptionalCookies();
+      hideBanner();
+    });
+
+    rejectBtn.addEventListener("click", () => {
+      safeStorageSet(COOKIE_KEY, "rejected");
+      hideBanner();
+    });
+  } else {
+    disableConsentUiCompletely();
+  }
+} catch (err) {
+  console.warn("Cookie consent fallback mode enabled:", err);
+  consentUiReady = false;
+  disableConsentUiCompletely();
 }
-
-  acceptBtn?.addEventListener("click", () => {
-    localStorage.setItem(COOKIE_KEY, "accepted");
-    enableOptionalCookies();
-    hideBanner();
-  });
-
-  rejectBtn?.addEventListener("click", () => {
-    localStorage.setItem(COOKIE_KEY, "rejected");
-    hideBanner();
-  });
 
   /* ----- Optional AMP-friendly outbound links ----- */
   const pageParams = new URLSearchParams(window.location.search);

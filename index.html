@@ -86,7 +86,7 @@
     transform 0.25s ease;
 }
 
-    .cookie-banner {
+  .cookie-banner {
   position: fixed;
   left: 20px;
   right: 20px;
@@ -95,6 +95,9 @@
   display: flex;
   justify-content: center;
   pointer-events: none;
+}
+ .cookie-banner[hidden] {
+  display: none !important;
 }
 
 .cookie-banner__content {
@@ -515,7 +518,7 @@
       <div class="cookie-banner__content">
         <p>
           This site uses cookies to improve functionality and, with your consent, measure traffic.
-          <a href="/privacy.html" target="_blank" rel="noopener">Learn more</a>
+          <a href="https://www.angelvscourses.com/privacy-policy" target="_blank" rel="noopener">Learn more</a>
         </p>
         <div class="cookie-banner__actions">
           <button id="cookie-reject" class="cookie-btn cookie-btn--ghost">Reject</button>
@@ -578,10 +581,13 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   if (!savedChoice) {
-    showBanner();
-  } else if (savedChoice === "accepted") {
-    enableOptionalCookies();
-  }
+  showBanner();
+} else if (savedChoice === "accepted") {
+  enableOptionalCookies();
+  hideBanner();
+} else if (savedChoice === "rejected") {
+  hideBanner();
+}
 
   acceptBtn?.addEventListener("click", () => {
     localStorage.setItem(COOKIE_KEY, "accepted");

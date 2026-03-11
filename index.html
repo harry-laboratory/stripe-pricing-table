@@ -89,9 +89,9 @@
  .cookie-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.18);
-  backdrop-filter: blur(1px);
-  -webkit-backdrop-filter: blur(1px);
+  background: rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(0.5px);
+  -webkit-backdrop-filter: blur(0.5px);
   z-index: 9998;
 
   opacity: 1;
@@ -831,13 +831,13 @@ const hideBanner = () => {
         const { downTarget, upTarget } = getPricingTargets();
 
         // Φάση 1: κατέβα μέχρι χαμηλά στο pricing table
-        await animateWindowScroll(startY, downTarget, 3200);
+        await animateWindowScroll(startY, downTarget, 3100);
 
         // μικρή παύση για cinematic effect
-        await sleep(200);
+        await sleep(150);
 
         // Φάση 2: ανέβα και σταμάτα ώστε να φαίνονται τα 2 πρώτα προϊόντα
-        await animateWindowScroll(downTarget, upTarget, 2400);
+        await animateWindowScroll(downTarget, upTarget, 2000);
       } finally {
         btn.classList.remove("is-busy");
         isTourAnimating = false;

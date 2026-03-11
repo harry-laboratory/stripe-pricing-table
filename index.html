@@ -489,11 +489,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ----- Shared easing / helpers ----- */
+  /* ----- Shared easing / helpers ----- 
   const easeInOutCubic = (t) =>
     t < 0.5
       ? 4 * t * t * t
-      : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      : 1 - Math.pow(-2 * t + 2, 3) / 2; */
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -504,13 +504,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const frame = (now) => {
         const elapsed = now - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        const eased = easeInOutCubic(progress);
 
-        window.scrollTo(0, from + (to - from) * eased);
+        window.scrollTo(0, from + (to - from) * progress);
 
         if (progress < 1) {
           requestAnimationFrame(frame);
         } else {
+          window.scrollTo(0, to);
           resolve();
         }
       };

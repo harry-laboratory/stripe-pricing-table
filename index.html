@@ -86,7 +86,29 @@
     transform 0.25s ease;
 }
 
-  .cookie-banner {
+ .cookie-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 9998;
+
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+.cookie-backdrop[hidden] {
+  display: none !important;
+}
+
+.cookie-backdrop.is-hiding {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.cookie-banner {
   position: fixed;
   left: 20px;
   right: 20px;
@@ -95,9 +117,23 @@
   display: flex;
   justify-content: center;
   pointer-events: none;
+
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.28s ease, transform 0.28s ease;
 }
- .cookie-banner[hidden] {
+
+.cookie-banner[hidden] {
   display: none !important;
+}
+
+.cookie-banner.is-hiding {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+body.cookie-consent-active {
+  overflow: hidden;
 }
 
 .cookie-banner__content {
@@ -566,13 +602,43 @@ document.addEventListener("DOMContentLoaded", () => {
   const rejectBtn = document.getElementById("cookie-reject");
   const savedChoice = localStorage.getItem(COOKIE_KEY);
 
-  const showBanner = () => {
-    if (banner) banner.hidden = false;
-  };
+const showBanner = () => {
+  if (banner) {
+    banner.hidden = false;
+    banner.classList.remove("is-hiding");
+  }
 
-  const hideBanner = () => {
-    if (banner) banner.hidden = true;
-  };
+  if (backdrop) {
+    backdrop.hidden = false;
+    backdrop.classList.remove("is-hiding");
+  }
+
+  document.body.classList.add("cookie-consent-active");
+};
+
+const hideBanner = () => {
+  if (banner) {
+    banner.classList.add("is-hiding");
+  }
+
+  if (backdrop) {
+    backdrop.classList.add("is-hiding");
+  }
+
+  document.body.classList.remove("cookie-consent-active");
+
+  setTimeout(() => {
+    if (banner) {
+      banner.hidden = true;
+      banner.classList.remove("is-hiding");
+    }
+
+    if (backdrop) {
+      backdrop.hidden = true;
+      backdrop.classList.remove("is-hiding");
+    }
+  }, 280);
+};
 
   const enableOptionalCookies = () => {
     // ΕΔΩ βάζεις οτιδήποτε μη απαραίτητο

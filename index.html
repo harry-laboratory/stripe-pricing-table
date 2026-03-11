@@ -198,6 +198,23 @@ body.cookie-consent-active {
   font-weight: 600;
 }
 
+.compatibility-banner {
+  position: fixed;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9997;
+  margin: 0 auto;
+  width: min(680px, calc(100% - 40px));
+  background: rgba(20, 20, 20, 0.92);
+  color: #f5f5f5;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
 @media (max-width: 640px) {
   .cookie-banner__content {
     flex-direction: column;
@@ -574,6 +591,10 @@ body.cookie-consent-active {
 <script type="text/javascript">window.onload = function() { Calendly.initBadgeWidget({ url: 'https://calendly.com/charilaoangelus/online-lesson-booking?hide_gdpr_banner=1', text: 'Book a trial lesson', color: '#0074d4', textColor: '#ffffff', branding: true }); }</script>
 <!-- Calendly badge widget end -->
     
+    <div id="compatibility-banner" class="compatibility-banner" hidden>
+      Cookie preferences are unavailable in this browser mode.
+    </div>
+
     <footer class="footer">
   <a href="https://angelvscourses.com/privacy-policy" class="footer-link" rel="noopener noreferrer" data-amp-link="true">
     PRIVACY POLICY
@@ -602,99 +623,63 @@ document.addEventListener("DOMContentLoaded", () => {
   const navInner = document.querySelector(".nav-inner");
   const btn = document.querySelector(".cta-button");
   const target = document.getElementById("pricing");
+
   const banner = document.getElementById("cookie-banner");
   const backdrop = document.getElementById("cookie-backdrop");
   const acceptBtn = document.getElementById("cookie-accept");
   const rejectBtn = document.getElementById("cookie-reject");
+  const compatibilityBanner = document.getElementById("compatibility-banner");
 
   function safeStorageGet(key) {
-  try {
-    return window.localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-}
-
-function safeStorageSet(key, value) {
-  try {
-    window.localStorage.setItem(key, value);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-const savedChoice = safeStorageGet(COOKIE_KEY);
-let consentUiReady = false;
-let consentBlockingEnabled = false;
-
-function elementIsActuallyVisible(el) {
-  if (!el) return false;
-  if (el.hidden) return false;
-
-  const style = window.getComputedStyle(el);
-  if (style.display === "none") return false;
-  if (style.visibility === "hidden") return false;
-  if (parseFloat(style.opacity) === 0) return false;
-
-  const rect = el.getBoundingClientRect();
-  return rect.width > 0 && rect.height > 0;
-}
-
-const disableConsentUiCompletely = () => {
-  consentBlockingEnabled = false;
-  document.body.classList.remove("cookie-consent-active");
-
-  if (banner) {
-    banner.hidden = true;
-    banner.classList.remove("is-hiding");
-  }
-
-  if (backdrop) {
-    backdrop.hidden = true;
-    backdrop.classList.remove("is-hiding");
-  }
-};
-  
-const showBanner = () => {
-  if (!consentUiReady) return;
-
-  if (banner) {
-    banner.hidden = false;
-    banner.classList.remove("is-hiding");
-  }
-
-  if (backdrop) {
-    backdrop.hidden = false;
-    backdrop.classList.remove("is-hiding");
-  }
-
-  requestAnimationFrame(() => {
-    const bannerVisible = elementIsActuallyVisible(banner);
-    const backdropVisible = elementIsActuallyVisible(backdrop);
-
-    if (bannerVisible && backdropVisible) {
-      consentBlockingEnabled = true;
-      document.body.classList.add("cookie-consent-active");
-    } else {
-      disableConsentUiCompletely();
+    try {
+      return window.localStorage.getItem(key);
+    } catch {
+      return null;
     }
-  });
-};
-
-const hideBanner = () => {
-  document.body.classList.remove("cookie-consent-active");
-  consentBlockingEnabled = false;
-
-  if (banner) {
-    banner.classList.add("is-hiding");
   }
 
-  if (backdrop) {
-    backdrop.classList.add("is-hiding");
+  function safeStorageSet(key, value) {
+    try {
+      window.localStorage.setItem(key, value);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
-  setTimeout(() => {
+  const savedChoice = safeStorageGet(COOKIE_KEY);
+  let consentUiReady = false;
+  let consentBlockingEnabled = false;
+
+  const showCompatibilityBanner = () => {
+    if (compatibilityBanner) {
+      compatibilityBanner.hidden = false;
+    }
+  };
+
+  const hideCompatibilityBanner = () => {
+    if (compatibilityBanner) {
+      compatibilityBanner.hidden = true;
+    }
+  };
+
+  function elementIsActuallyVisible(el) {
+    if (!el) return false;
+    if (el.hidden) return false;
+
+    const style = window.getComputedStyle(el);
+    if (style.display === "none") return false;
+    if (style.visibility === "hidden") return false;
+    if (parseFloat(style.opacity) === 0) return false;
+
+    const rect = el.getBoundingClientRect();
+    return rect.width > 0 && rect.height > 0;
+  }
+
+  function disableConsentUiCompletely() {
+    consentBlockingEnabled = false;
+    document.body.classList.remove("cookie-consent-active");
+
     if (banner) {
       banner.hidden = true;
       banner.classList.remove("is-hiding");
@@ -704,45 +689,114 @@ const hideBanner = () => {
       backdrop.hidden = true;
       backdrop.classList.remove("is-hiding");
     }
-  }, 280);
-};
 
-  const enableOptionalCookies = () => {
+    showCompatibilityBanner();
+  }
+
+  function enableOptionalCookies() {
     // ΕΔΩ βάζεις οτιδήποτε μη απαραίτητο
     // π.χ. Google Analytics / Meta Pixel / Hotjar
     console.log("Optional cookies accepted");
-  };
+  }
 
-try {
-  if (banner && backdrop && acceptBtn && rejectBtn) {
-    consentUiReady = true;
+  function runCompatibilityWatchdog() {
+    setTimeout(() => {
+      const bodyLocked = document.body.classList.contains("cookie-consent-active");
+      const bannerVisible = elementIsActuallyVisible(banner);
+      const backdropVisible = elementIsActuallyVisible(backdrop);
 
-    if (!savedChoice) {
-      showBanner();
-    } else if (savedChoice === "accepted") {
-      enableOptionalCookies();
-      hideBanner();
-    } else if (savedChoice === "rejected") {
-      hideBanner();
+      if (bodyLocked && (!bannerVisible || !backdropVisible)) {
+        disableConsentUiCompletely();
+        showCompatibilityBanner();
+      }
+    }, 500);
+  }
+
+  const showBanner = () => {
+    if (!consentUiReady) return;
+
+    if (banner) {
+      banner.hidden = false;
+      banner.classList.remove("is-hiding");
     }
 
-    acceptBtn.addEventListener("click", () => {
-      safeStorageSet(COOKIE_KEY, "accepted");
-      enableOptionalCookies();
-      hideBanner();
+    if (backdrop) {
+      backdrop.hidden = false;
+      backdrop.classList.remove("is-hiding");
+    }
+
+    requestAnimationFrame(() => {
+      const bannerVisible = elementIsActuallyVisible(banner);
+      const backdropVisible = elementIsActuallyVisible(backdrop);
+
+      if (bannerVisible && backdropVisible) {
+        consentBlockingEnabled = true;
+        document.body.classList.add("cookie-consent-active");
+        hideCompatibilityBanner();
+      } else {
+        disableConsentUiCompletely();
+      }
     });
 
-    rejectBtn.addEventListener("click", () => {
-      safeStorageSet(COOKIE_KEY, "rejected");
-      hideBanner();
-    });
-  } else {
+    runCompatibilityWatchdog();
+  };
+
+  const hideBanner = () => {
+    document.body.classList.remove("cookie-consent-active");
+    consentBlockingEnabled = false;
+
+    if (banner) {
+      banner.classList.add("is-hiding");
+    }
+
+    if (backdrop) {
+      backdrop.classList.add("is-hiding");
+    }
+
+    setTimeout(() => {
+      if (banner) {
+        banner.hidden = true;
+        banner.classList.remove("is-hiding");
+      }
+
+      if (backdrop) {
+        backdrop.hidden = true;
+        backdrop.classList.remove("is-hiding");
+      }
+    }, 280);
+  };
+
+  try {
+    if (banner && backdrop && acceptBtn && rejectBtn) {
+      consentUiReady = true;
+      hideCompatibilityBanner();
+
+      if (!savedChoice) {
+        showBanner();
+      } else if (savedChoice === "accepted") {
+        enableOptionalCookies();
+        hideBanner();
+      } else if (savedChoice === "rejected") {
+        hideBanner();
+      }
+
+      acceptBtn.addEventListener("click", () => {
+        safeStorageSet(COOKIE_KEY, "accepted");
+        enableOptionalCookies();
+        hideBanner();
+      });
+
+      rejectBtn.addEventListener("click", () => {
+        safeStorageSet(COOKIE_KEY, "rejected");
+        hideBanner();
+      });
+    } else {
+      disableConsentUiCompletely();
+    }
+  } catch (err) {
+    console.warn("Cookie consent fallback mode enabled:", err);
     disableConsentUiCompletely();
   }
-} catch (err) {
-  console.warn("Cookie consent fallback mode enabled:", err);
-  disableConsentUiCompletely();
-}
 
   /* ----- Optional AMP-friendly outbound links ----- */
   const pageParams = new URLSearchParams(window.location.search);
@@ -815,13 +869,11 @@ try {
     const absoluteTop = window.scrollY + rect.top;
     const absoluteBottom = absoluteTop + target.offsetHeight;
 
-    // 1) Κάτω target: σχεδόν στο τέλος του pricing section
     const downTarget = Math.min(
       absoluteBottom - window.innerHeight + 80,
       getMaxScrollY()
     );
 
-    // 2) Πάνω target: αρκετά ψηλά ώστε να φαίνονται οι 2 πρώτες κάρτες
     const upTarget = Math.max(
       absoluteTop - navHeight - 12,
       0
@@ -895,20 +947,13 @@ try {
       btn.classList.add("is-busy");
 
       try {
-        // Μικρή αναμονή ώστε αν το Stripe widget συνεχίζει να "στρώνει" ύψος,
-        // να πάρουμε πιο σωστά targets.
         await sleep(250);
 
         const startY = window.scrollY;
         const { downTarget, upTarget } = getPricingTargets();
 
-        // Φάση 1: κατέβα μέχρι χαμηλά στο pricing table
         await animateWindowScroll(startY, downTarget, 3150);
-
-        // μικρή παύση για cinematic effect
         await sleep(100);
-
-        // Φάση 2: ανέβα και σταμάτα ώστε να φαίνονται τα 2 πρώτα προϊόντα
         await animateWindowScroll(downTarget, upTarget, 1800);
       } finally {
         btn.classList.remove("is-busy");

@@ -210,6 +210,10 @@ body.cookie-consent-active {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
+.top-nav {
+  z-index: 999;
+}
+
   .compatibility-banner[hidden] {
   display: none !important;
 }
@@ -659,7 +663,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const savedChoice = safeStorageGet(COOKIE_KEY);
   let consentUiReady = false;
-  let consentBlockingEnabled = false;
 
   const showCompatibilityBanner = () => {
     if (compatibilityBanner) {
@@ -687,7 +690,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function disableConsentUiCompletely() {
-  consentBlockingEnabled = false;
   document.body.classList.remove("cookie-consent-active");
 
   if (banner) {
@@ -742,7 +744,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const backdropVisible = elementIsActuallyVisible(backdrop);
 
     if (bannerVisible && backdropVisible) {
-      consentBlockingEnabled = true;
       document.body.classList.add("cookie-consent-active");
       hideCompatibilityBanner();
     } else {
@@ -756,8 +757,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const hideBanner = () => {
     document.body.classList.remove("cookie-consent-active");
-    consentBlockingEnabled = false;
-
     if (banner) {
       banner.classList.add("is-hiding");
     }

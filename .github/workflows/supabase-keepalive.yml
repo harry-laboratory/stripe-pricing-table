@@ -1,0 +1,15 @@
+name: Supabase Keepalive
+
+on:
+  schedule:
+    - cron: "0 9 */3 * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping Supabase keepalive endpoint
+        run: |
+          curl -i --fail https://zbsuqikxoffzfupkqqbf.supabase.co/functions/v1/keepalive

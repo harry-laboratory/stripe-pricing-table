@@ -381,7 +381,7 @@ body.cookie-consent-active {
     .pricing-wrapper.is-visible {
       opacity: 1;
       transform: translateY(0) scale(1);
-      border-radius: 0 0 12px 12px;
+      border-radius: 0 0 24px 24px;
       overflow: hidden;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.10),
                  0 20px 40px rgba(0, 0, 0, 0.15);
@@ -416,7 +416,7 @@ body.cookie-consent-active {
     .pricing-intro {
   background: #0d0d0d;
   padding: 24px;
-  border-radius: 12px 12px 0 0;
+  border-radius: 24px 24px 0 0;
   box-shadow:  0 8px 16px rgba(0, 0, 0, 0.10),
               0 20px 40px rgba(0, 0, 0, 0.15);
   margin-bottom: 24px;
@@ -450,6 +450,123 @@ body.cookie-consent-active {
 
 .pricing-intro a:hover::after {
   transform: scaleX(1);
+}
+
+    .subscription-portal {
+  padding: 10px 0px 10px;
+}
+
+.subscription-portal-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 42px 32px;
+  text-align: center;
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.09);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.portal-eyebrow {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 6px 12px;
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  border-radius: 999px;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(245, 215, 110, 0.92);
+  background: rgba(212, 175, 55, 0.06);
+}
+
+.subscription-portal-inner h2 {
+  margin: 0 0 16px;
+  font-size: clamp(1.9rem, 3vw, 2.5rem);
+  line-height: 1.15;
+  color: #f5f1e8;
+  font-weight: 600;
+}
+
+.portal-description {
+  max-width: 680px;
+  margin: 0 auto;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.82);
+}
+
+.portal-description.secondary {
+  margin-top: 14px;
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.62);
+}
+
+.portal-actions {
+  margin-top: 28px;
+}
+
+.portal-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #111;
+  background: linear-gradient(135deg, #d4af37, #f5d76e);
+  box-shadow:
+    0 10px 24px rgba(212, 175, 55, 0.18),
+    inset 0 1px 0 rgba(255,255,255,0.3);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.portal-button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 14px 28px rgba(212, 175, 55, 0.22),
+    inset 0 1px 0 rgba(255,255,255,0.34);
+  filter: brightness(1.02);
+}
+
+.portal-button:active {
+  transform: translateY(0);
+}
+
+.portal-microcopy {
+  margin-top: 14px;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.46);
+}
+
+@media (max-width: 640px) {
+  .subscription-portal {
+    padding: 70px 16px 20px;
+  }
+
+  .subscription-portal-inner {
+    padding: 30px 20px;
+    border-radius: 20px;
+  }
+
+  .portal-description,
+  .portal-description.secondary {
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .portal-button {
+    width: 100%;
+    max-width: 100%;
+  }
 }
     
 .footer {
@@ -589,6 +706,39 @@ body.cookie-consent-active {
         </stripe-pricing-table>
     </main>
 
+    <section class="subscription-portal fade-in" aria-labelledby="portal-title">
+  <div class="subscription-portal-inner">
+    <span class="portal-eyebrow">For Monthly Students</span>
+    <h2 id="portal-title">Manage Your Subscription</h2>
+
+    <p class="portal-description">
+      Students with an active monthly subscription can access their secure billing portal
+      to manage their plan, update payment details, and review billing history.
+    </p>
+
+    <p class="portal-description secondary">
+      This area is intended for monthly-based subscriptions only. You will be asked to enter
+      the same email address used during your purchase.
+    </p>
+
+    <div class="portal-actions">
+      <a
+        href="https://billing.stripe.com/p/login/28E4gy22HaK6gAQgiVb3q00"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="portal-button"
+        aria-label="Open customer portal for monthly subscriptions"
+      >
+        Open Customer Portal
+      </a>
+    </div>
+
+    <p class="portal-microcopy">
+      Secure access powered by Stripe.
+    </p>
+  </div>
+</section>
+    
     <div id="cookie-backdrop" class="cookie-backdrop" hidden></div>
     <div id="cookie-banner" class="cookie-banner" hidden>
       <div class="cookie-banner__content">

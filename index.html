@@ -797,7 +797,7 @@ body.cookie-consent-active {
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  let scrollTimeout;
+  let timeout;
   let isTourAnimating = false;
   const COOKIE_KEY = "angelvs_cookie_consent";
 
@@ -1072,12 +1072,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   window.addEventListener("scroll", () => {
-    document.body.classList.add("scrolling");
+    document.documentElement.classList.add("show-scrollbar");
 
-    clearTimeout(scrollTimeout);
-
-    scrollTimeout = setTimeout(() => {
-      document.body.classList.remove("scrolling");
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      document.documentElement.classList.remove("show-scrollbar");
     }, 800);
   });
 

@@ -53,16 +53,34 @@
     );
   }
 }
-    /* Chrome, Edge, Safari */
-  ::-webkit-scrollbar {
-   display: none;
-  }
+    
+/* Default hidden (λεπτή αλλά αόρατη) */
+::-webkit-scrollbar {
+  width: 4px;
+}
 
-    /* Firefox */
-   html {
-  scrollbar-width: none;
-  }
+::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
+/* Όταν ενεργοποιηθεί */
+.show-scrollbar::-webkit-scrollbar-thumb {
+  opacity: 1;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s ease;
+}
+
+html.show-scrollbar {
+  scrollbar-color: black transparent;
+}
     .top-nav {
   width: 100%;
   position: fixed;

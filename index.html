@@ -792,11 +792,49 @@ body.cookie-consent-active {
       </div>
     </div>
 
-<!-- Calendly badge widget begin -->
-<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
-<script type="text/javascript">window.onload = function() { Calendly.initBadgeWidget({ url: 'https://calendly.com/charilaoangelus/online-lesson-booking?hide_gdpr_banner=1', text: 'Book a trial lesson', color: '#0074d4', textColor: '#ffffff', branding: true }); }</script>
-<!-- Calendly badge widget end -->
+<!-- Cal floating-popup embed code begins -->
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "free-trial-booking", {origin:"https://app.cal.com"});
+
+  Cal.ns["free-trial-booking"]("floatingButton", {"calLink":"angelvs-courses-skgjgd/free-trial-booking","config":{"layout":"month_view","useSlotsViewOnSmallScreen":"true"},"buttonColor":"#0074D4"}); 
+  Cal.ns["free-trial-booking"]("ui", {"cssVarsPerTheme":{"light":{"cal-brand":"#292929"},"dark":{"cal-brand":"#FF8833"}},"hideEventTypeDetails":false,"layout":"month_view"});
+  (function () {
+  const css = `
+    button {
+      transition: transform 0.15s ease-out,
+                  filter 0.15s ease-out,
+                  box-shadow 0.15s ease-out !important;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35) !important;
+    }
+    button:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.45) !important;
+      filter: brightness(1.08) !important;
+    }
+  `;
+
+  const inject = () => {
+    const host = document.querySelector('cal-floating-button');
+    if (!host || !host.shadowRoot) return false;
+    if (host.shadowRoot.querySelector('style[data-custom-hover]')) return true;
+    const style = document.createElement('style');
+    style.setAttribute('data-custom-hover', 'true');
+    style.textContent = css;
+    host.shadowRoot.appendChild(style);
+    return true;
+  };
+
+  // Retry every 100ms for up to 15 seconds — Cal.com mounts asynchronously
+  if (!inject()) {
+    const start = Date.now();
+    const timer = setInterval(() => {
+      if (inject() || Date.now() - start > 15000) clearInterval(timer);
+    }, 100);
+  }
+})();
+  </script>
+  <!-- Cal floating-popup embed code ends -->
     
     <footer class="footer">
   <a href="https://angelvscourses.com/privacy-policy" class="footer-link" rel="noopener noreferrer" data-amp-link="true">

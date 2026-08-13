@@ -299,6 +299,59 @@
     .cookie__panel { flex-direction:column; align-items:stretch; text-align:center; }
     .cookie__actions { justify-content:center; }
   }
+
+  /* ---------- Phone / small-screen layout ---------- */
+  @media (max-width:640px) {
+    /* Nav: tighter padding, smaller logo + wordmark so it never crowds */
+    .navbar { padding:14px 16px; }
+    .navbar__inner { gap:10px; }
+    .navbar__logo { width:30px; height:30px; }
+    .navbar__word { font-size:1.02rem; letter-spacing:0.04em; }
+
+    /* Hero: svh avoids the mobile URL-bar jump; type scales with the viewport */
+    .hero { min-height:calc(100svh - 64px); padding:0 20px; }
+    .hero__title { font-size:clamp(2rem,8.5vw,2.6rem); margin:12px 0 8px; }
+    .hero__sub   { font-size:1.05rem; }
+    .hero__cta   { margin-top:22px; }
+
+    /* Cards / intro: reclaim horizontal space */
+    .card--dark { padding:22px 20px; }
+    .intro p { font-size:1.02rem; line-height:1.65; }
+
+    /* Pricing: single column, tighter gaps, featured card fills width */
+    .pricing { padding:40px 16px 8px; }
+    .pricing__grid { grid-template-columns:1fr; gap:14px; }
+    .pricing__featured .pricing-cell { max-width:none; }
+    .pricing-card { padding:24px 20px 22px; }
+    .pricing-card__head { flex-wrap:wrap; }
+    .pricing-card__title { font-size:1.15rem; }
+    .pricing-card__amount { font-size:2.2rem; }
+
+    /* Portal: smaller padding + heading, full-width CTA */
+    .portal { padding:40px 16px; }
+    .portal-card { padding:32px 22px; }
+    .portal-card h2 { font-size:1.9rem; }
+    .portal-card p  { font-size:0.95rem; }
+    .portal-card__cta .btn { width:100%; max-width:340px; }
+
+    .footer__links { flex-wrap:wrap; }
+    /* Leave room so the raised Cal "Book a Trial" button (JS sets its
+       bottom to 88px on mobile) never covers the footer copy. */
+    .footer { padding-bottom:150px; }
+  }
+
+  @media (max-width:380px) {
+    .navbar__word { font-size:0.92rem; }
+    .hero__title { font-size:1.85rem; }
+    .card--dark, .pricing-card { padding-left:18px; padding-right:18px; }
+  }
+
+  /* Touch devices: neutralise the desktop hover-dim so a tapped card
+     doesn't leave its siblings stuck dimmed / shrunken. */
+  @media (hover: none) {
+    .pricing:has(.pricing-cell:hover) .pricing-cell:not(:hover) { opacity:1; filter:none; transform:none; }
+    .pricing .pricing-cell:hover { transform:none; }
+  }
 </style>
 </head>
 
@@ -518,6 +571,12 @@ Cal.ns["free-trial-booking"]("ui", { cssVarsPerTheme: { light: { "cal-brand": "#
     if (!btn) return false;
     if (host.__customHover) return true;
     host.__customHover = true;
+    /* On phones, raise the fixed button so it clears the footer copy
+       (paired with .footer padding-bottom in the mobile media query). */
+    const smallScreen = window.matchMedia('(max-width: 640px)');
+    const place = () => btn.style.setProperty('bottom', smallScreen.matches ? '88px' : '16px', 'important');
+    place();
+    smallScreen.addEventListener('change', place);
     const rest = () => {
       btn.style.setProperty('transform', 'none', 'important');
       btn.style.setProperty('box-shadow', '0 8px 20px rgba(0, 0, 0, 0.35)', 'important');

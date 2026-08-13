@@ -335,9 +335,6 @@
     .portal-card__cta .btn { width:100%; max-width:340px; }
 
     .footer__links { flex-wrap:wrap; }
-    /* Leave room so the raised Cal "Book a Trial" button (JS sets its
-       bottom to 88px on mobile) never covers the footer copy. */
-    .footer { padding-bottom:150px; }
   }
 
   @media (max-width:380px) {
@@ -571,12 +568,6 @@ Cal.ns["free-trial-booking"]("ui", { cssVarsPerTheme: { light: { "cal-brand": "#
     if (!btn) return false;
     if (host.__customHover) return true;
     host.__customHover = true;
-    /* On phones, raise the fixed button so it clears the footer copy
-       (paired with .footer padding-bottom in the mobile media query). */
-    const smallScreen = window.matchMedia('(max-width: 640px)');
-    const place = () => btn.style.setProperty('bottom', smallScreen.matches ? '88px' : '16px', 'important');
-    place();
-    smallScreen.addEventListener('change', place);
     const rest = () => {
       btn.style.setProperty('transform', 'none', 'important');
       btn.style.setProperty('box-shadow', '0 8px 20px rgba(0, 0, 0, 0.35)', 'important');

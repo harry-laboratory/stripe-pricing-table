@@ -275,6 +275,12 @@
   /* ---------- Cookie banner ---------- */
   .cookie[hidden] { display:none; }
   .cookie__scrim { position:fixed; inset:0; z-index:70; background:rgba(0,0,0,0.22); backdrop-filter:blur(0.75px); }
+  /* Keep the Cal.com "Book a Trial" floating button below the cookie scrim
+     so it sits behind the banner and gets blurred along with everything else.
+     The real button lives in the element's shadow root with a max z-index, so we
+     make the host a positioned stacking context (z-index 60) to cap it below the
+     scrim (z-index 70). position:relative doesn't affect the fixed button's spot. */
+  cal-floating-button { position:relative !important; z-index:60 !important; }
   .cookie__bar { position:fixed; left:20px; right:20px; bottom:20px; z-index:71; display:flex; justify-content:center; }
   .cookie__panel {
     width:min(680px,100%); display:flex; gap:14px; align-items:center; justify-content:space-between;
